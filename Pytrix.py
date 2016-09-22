@@ -87,7 +87,7 @@ class Matrix(object):
 		if i is None:
 			i = self.rank[1]
 		for row in self.mat:
-			row.append(new_col[0])
+			row.insert(i, new_col[0])
 		self.__refresh_properties__(self.mat)
 
 	def __add__(self, matrix_b):
@@ -123,8 +123,3 @@ class Matrix(object):
 
 	# def _rmul_(self, right_term):
 	# def here for right multiplication
-
-
-matrixA = Matrix([[1, 2, 3], [3, 2, 1], [5, 5, 5]])
-matrixA.add_col([4, 4, 4], 0)
-print matrixA
