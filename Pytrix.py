@@ -39,7 +39,7 @@ class Matrix(object):
 			matrix_list.append(parsed_row)
 		return matrix_list
 
-	def __repr__(self):
+	def __repr__(self): #problem if terms are more than one digit, columns not aligned
 		matrix = self.mat
 		string = ""
 		for row in matrix:
@@ -47,17 +47,47 @@ class Matrix(object):
 		return string
 
 	def addRow(self, new_row, i = None):
+		#Insert new_row (a list) at index i, defaulting to the end of the matrix
 		if len(new_row) != self.rank[1]:
 			raise MatrixError, "The new row must be the same length as the other rows"
 		if i == None:
 			i = self.rank[0]
 		self.mat.insert(i, new_row)
+		self.__init__(self.mat)
 
+	def addCol(self, new_col, i = None):
+        #Insert new_col (a list) at index i, defaulting to the end of the matrix
+		if len(new_col) != self.rank[0]:
+			raise MatrixError, "The new column must be the same length as the other columns"
+		if i == None:
+			i = self.rank[1]
+		for index, row in enumerate(self.mat):
+			row.append(new_col[index])
+		self.__init__(self.mat)
 
 	def __add__(self, matrixB):
+		#Add two matrices of equal rank element by element
 		if type(matrixB) != Matrix:
 			raise MatrixError, "Addition is only defined between two matrices of equal length"
 		if self.rank != matrixB.rank:
 			raise MatrixError, "The matrices must be of equal rank"
 		new_matrix = Matrix(self.mat)
-		#for row in new_matrix.rows:
+		for index, rowA in enumerate(new_matrix.rows):
+			new_matrix.mat[index] = [sum(x) for x in zip(rowA, matrixB.rows[index])]
+		return Matrix(new_matrix.mat)
+
+	def __mul__(self, left_term):
+		#multiplies left_turn on left of matrix -- If a2 * A multiplies each element in A by 2, B * A performs matrix multiplicaiton with B left of A
+		print self.mat
+		if type(left_term) != Matrix and type(left_term) != int and type(left_term) != float:
+			raise MatrixError, "Multiplication not defined for Matrix * {}".format(type(left_term))
+		#if type(left_term) == int or type(left_term) == float:
+			#work here
+		'''else:
+			if self.rank[0] != left_term.rank[1]:
+				raise MatrixError, "Invalid dimensions"'''
+
+	#def _rmul_(self, right_term):
+		#def here for right mult
+matrixA = Matrix()
+print matrixA + Matrix([[1,2,3],[3,2,1]])
