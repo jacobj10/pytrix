@@ -12,6 +12,10 @@ class Matrix(object):
 				same_len = False
 		if not same_len:
 			raise MatrixError, "The number of items in each row must be equal"
+		self.__refresh_properties__(mat)
+
+	def __refresh_properties__(self, mat):
+		#Called after any changes to a matrix to refresh its rows, columns, rank, etc.
 		self.rows = [row for row in mat]
 		col_lst = []
 		for col_index in range(len(mat[0])):
@@ -21,6 +25,7 @@ class Matrix(object):
 		self.rank = (len(self.rows), len(self.cols))
 
 	def get_input(self):
+		#Asks user for inputs through console rather than a hard coded input. Called if an empty matrix object is inititalized
 		matrix_list = []
 		try:
 			rows = int(raw_input("Enter number of rows (m)... "))
@@ -53,7 +58,7 @@ class Matrix(object):
 		if i == None:
 			i = self.rank[0]
 		self.mat.insert(i, new_row)
-		self.__init__(self.mat)
+		self.__refresh_properties__(self.mat)
 
 	def addCol(self, new_col, i = None):
         #Insert new_col (a list) at index i, defaulting to the end of the matrix
@@ -63,7 +68,7 @@ class Matrix(object):
 			i = self.rank[1]
 		for index, row in enumerate(self.mat):
 			row.append(new_col[index])
-		self.__init__(self.mat)
+		self.__refresh_properties__(self.mat)
 
 	def __add__(self, matrixB):
 		#Add two matrices of equal rank element by element
@@ -89,5 +94,3 @@ class Matrix(object):
 
 	#def _rmul_(self, right_term):
 		#def here for right mult
-matrixA = Matrix()
-print matrixA + Matrix([[1,2,3],[3,2,1]])
