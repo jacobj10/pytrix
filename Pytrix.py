@@ -3,6 +3,8 @@ class MatrixError(Exception):
 
 class Matrix(object):
 	def __init__(self, mat=None):
+		if mat is None:
+			mat = self.get_input()
 		same_len = True
 		length = len(mat[0])
 		for row in mat:
@@ -17,6 +19,25 @@ class Matrix(object):
 		self.cols = col_lst
 		self.mat = mat
 		self.rank = (len(self.rows), len(self.cols))
+
+	def get_input(self):
+		matrix_list = []
+		try:
+			rows = int(raw_input("Enter number of rows (m)... "))
+			columns = int(raw_input("Enter number of columns (n)... "))
+		except ValueError:
+			raise MatrixError("Invalid dimensions")
+		for m in range(0, rows):
+			raw_row = raw_input("Row {0}: ".format(m + 1))
+			parsed_row = raw_row.split(',') if ',' in raw_row else raw_row.split(' ')
+			try:
+				parsed_row = [int(x) for x in parsed_row]
+			except ValueError:
+				raise MatrixError("Invalid format for row")
+			if len(parsed_row) != columns:
+				raise MatrixError("Invalid row dimensions")
+			matrix_list.append(parsed_row)
+		return matrix_list
 
 	def __repr__(self):
 		matrix = self.mat
@@ -40,4 +61,3 @@ class Matrix(object):
 			raise MatrixError, "The matrices must be of equal rank"
 		new_matrix = Matrix(self.mat)
 		#for row in new_matrix.rows:
-	
